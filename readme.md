@@ -15,7 +15,7 @@ After selecting the file, it will be located and highlighted in the Solution Exp
 
 ---
 
-To download, simply install [**ReSharper.LocateFileInSolutionExplorer**](https://resharper-plugins.jetbrains.com/packages/ReSharper.LocateFileInSolutionExplorer) package from ReSharper's [Extension Gallery](http://resharper-plugins.jetbrains.com/).
+To download, simply install [**ReSharper.LocateFileInSolutionExplorer**](https://resharper-plugins.jetbrains.com/packages/ReSharper.LocateFileInSolutionExplorer) package from ReSharper's [Extensions Gallery](http://resharper-plugins.jetbrains.com/).
 
 ReSharper 8.1 or later required.
 
