@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<actions>
+  <action id="LocateFileInSolutionExplorer" text="Locate File in Solution Explorer…" >
+  </action>
+
+  <!-- menu integration -->
+  <insert group-id="ReSharper.Tools" position="after" anchor-id="LocateInSolutionExplorer">
+    <action-ref id="LocateFileInSolutionExplorer" />
+  </insert>
+</actions>
