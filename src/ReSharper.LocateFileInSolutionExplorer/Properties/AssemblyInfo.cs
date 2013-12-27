@@ -6,8 +6,8 @@ using JetBrains.Application.PluginSupport;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ReSharper.LocateFileInSolutionExplorer")]
-[assembly: AssemblyDescription("Locate any file or folder by name in the solution explorer, without opening it. \n" +
-                               "Invoked via double Alt-Shift-L.")]
+[assembly: AssemblyDescription("Locate any file or folder by name in the solution explorer, without opening it. Invoked via double Shift-Alt-L.\r\n" +
+                               "Copyright © Igal Tabachnik, 2013")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Igal Tabachnik")]
 [assembly: AssemblyProduct("ReSharper.LocateFileInSolutionExplorer")]
@@ -21,7 +21,7 @@ using JetBrains.Application.PluginSupport;
 [assembly: ActionsXml("ReSharper.LocateFileInSolutionExplorer.Actions.xml")]
 
 // The following information is displayed by ReSharper in the Plugins dialog
-[assembly: PluginTitle("LocateFileInSolutionExplorer")]
-[assembly: PluginDescription("Locate any file or folder by name in the solution explorer, without opening it. \n" +
-                             "Invoked via double Alt-Shift-L.")]
+[assembly: PluginTitle("Locate File in Solution Explorer (double Shift-Alt-L)")]
+[assembly: PluginDescription("Locate any file or folder by name in the solution explorer, without opening it. Invoked via double Shift-Alt-L.\r\n" +
+                             "Copyright © Igal Tabachnik, 2013")]
 [assembly: PluginVendor("Igal Tabachnik")]
