@@ -19,7 +19,7 @@ using JetBrains.UI.Application.Progress;
 using JetBrains.UI.Controls.GotoByName;
 using JetBrains.UI.GotoByName;
 using JetBrains.Util;
-using DataConstants = JetBrains.ProjectModel.DataContext.DataConstants;
+using ProjectModelConstants = JetBrains.ProjectModel.DataContext.DataConstants;
 
 namespace ReSharper.LocateFileInSolutionExplorer
 {
@@ -30,33 +30,32 @@ namespace ReSharper.LocateFileInSolutionExplorer
 
         public void Execute(IDataContext context, DelegateExecute nextExecute)
         {
+            var solution = context.GetData(ProjectModelConstants.SOLUTION);
+            if (solution == null)
+            {
+                MessageBox.ShowError("Cannot execute the Go To action because there's no solution open.");
+                return;
+            }
+
+            var definition = Lifetimes.Define(solution.GetLifetime());
+
             var locks = Shell.Instance.GetComponent<IShellLocks>();
             var tasks = Shell.Instance.GetComponent<ITaskHost>();
-            ISolution solution = context.GetData(DataConstants.SOLUTION);
-            Action<LifetimeDefinition, Lifetime> lifetimeAction = (definition, lifetime) =>
-            {
-                TipsManager.Instance.FeatureIsUsed("LocateFileInSolutionExplorer", (string)null);
-                if (solution == null)
-                {
-                    MessageBox.ShowError("Cannot execute the Go To action because there's no solution open.", "");
-                }
-                else
-                {
-                    var controller = new LocateFileController(lifetime, solution, locks, tasks);
-                    EnableShowInFindResults(controller, definition);
-                    new GotoByNameMenu(context.GetComponent<GotoByNameMenuComponent>(),
-                                       definition,
-                                       controller.Model,
-                                       context.GetComponent<UIApplication>().MainWindow,
-                                       context.GetData(GotoByNameDataConstants.CurrentSearchText));
-                }
-            };
-            Lifetimes.Define(solution.GetLifetime(), null, lifetimeAction);
+
+            TipsManager.Instance.FeatureIsUsed("LocateFileInSolutionExplorer", (string)null);
+
+            var controller = new LocateFileController(definition.Lifetime, solution, locks, tasks);
+            EnableShowInFindResults(controller, definition);
+            new GotoByNameMenu(context.GetComponent<GotoByNameMenuComponent>(),
+                               definition,
+                               controller.Model,
+                               context.GetComponent<UIApplication>().MainWindow,
+                               context.GetData(GotoByNameDataConstants.CurrentSearchText));
         }
 
         public bool Update(IDataContext context, ActionPresentation presentation, DelegateUpdate nextUpdate)
         {
-            return context.CheckAllNotNull(DataConstants.SOLUTION);
+            return context.CheckAllNotNull(ProjectModelConstants.SOLUTION);
         }
 
         private void EnableShowInFindResults(LocateFileController controller, LifetimeDefinition definition)

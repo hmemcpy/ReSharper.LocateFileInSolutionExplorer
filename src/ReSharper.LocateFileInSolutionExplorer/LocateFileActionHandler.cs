@@ -4,68 +4,69 @@ using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Application.DataContext;
 using JetBrains.DataFlow;
-using JetBrains.VsIntegration.ActionManagement;
+using DataConstants = JetBrains.TextControl.DataContext.DataConstants;
 
 namespace ReSharper.LocateFileInSolutionExplorer
 {
     [ShellComponent]
     public class LocateFileActionHandler : IActionHandler
     {
-        private const string locateInSolutionExplorerId = "LocateInSolutionExplorer";
+        private const string LocateInSolutionExplorerId = "LocateInSolutionExplorer";
 
-        [NotNull]
-        private readonly IActionManager actionManager;
+        [NotNull] private readonly IActionManager actionManager;
+        [NotNull] private readonly object syncLock = new object();
+        private DateTime lastLocateInvocation = DateTime.MinValue;
+        private bool lastUnderlyingActionUpdate;
 
-        public LocateFileActionHandler([NotNull] IActionManager manager, Lifetime lifetime)
+        public LocateFileActionHandler([NotNull] Lifetime lifetime, [NotNull] IActionManager manager)
         {
             actionManager = manager;
 
-            var gotoTypeAction = manager.TryGetAction(locateInSolutionExplorerId) as IUpdatableAction;
-            if (gotoTypeAction != null)
+            var locateInSolutionAction = manager.TryGetAction(LocateInSolutionExplorerId) as IUpdatableAction;
+            if (locateInSolutionAction != null)
             {
-                gotoTypeAction.AddHandler(lifetime, this);
+                locateInSolutionAction.AddHandler(lifetime, this);
             }
         }
 
         public bool Update(IDataContext context, ActionPresentation presentation, DelegateUpdate nextUpdate)
         {
-            return nextUpdate();
-        }
+            // this allows double [Shift+Alt+L] to work even when there is no project file context
+            // available (for example, when 'References' project node is focused in Solution Explorer)
+            // and builtin 'LocateInSolutionExplorer' action is not normally available
+            lastUnderlyingActionUpdate = nextUpdate();
 
-        private bool isDoubleCompletion;
+            // and it's better to do this:
+            var locateFileAction = actionManager.TryGetAction(LocateFileAction.Id) as IUpdatableAction;
+            return locateFileAction == null || locateFileAction.Update(context);
+        }
 
         public void Execute(IDataContext context, DelegateExecute nextExecute)
         {
-            var vsActionManager = actionManager as VsActionManager;
-            if (vsActionManager == null || 
-                vsActionManager.LastActionToExecute == null)
-                return;
+            var textControl = context.GetData(DataConstants.TEXT_CONTROL);
+            GC.KeepAlive(textControl);
 
-            if (vsActionManager.LastActionToExecute.Id == locateInSolutionExplorerId && !isDoubleCompletion)
+            DateTime lastInvocation, utcNow = DateTime.UtcNow;
+            lock (syncLock)
             {
-                try
-                {
-                    nextExecute();
-                }
-                finally
-                {
-                    isDoubleCompletion = true;
-                }
-
-                return;
+                lastInvocation = this.lastLocateInvocation;
+                this.lastLocateInvocation = utcNow;
             }
-            
-            var locateFileAction = actionManager.TryGetAction(LocateFileAction.Id) as IExecutableAction;
-            if (locateFileAction != null)
+
+            const int doubleKeyPressDelay = 500;
+            if (utcNow.Subtract(lastInvocation).TotalMilliseconds < doubleKeyPressDelay)
             {
-                try
+                var locateFileAction = actionManager.TryGetAction(LocateFileAction.Id) as IExecutableAction;
+                if (locateFileAction != null)
                 {
                     locateFileAction.Execute(context);
+                    return;
                 }
-                finally
-                {
-                    isDoubleCompletion = false;
-                }
+            }
+
+            if (lastUnderlyingActionUpdate)
+            {
+                nextExecute();
             }
         }
     }
