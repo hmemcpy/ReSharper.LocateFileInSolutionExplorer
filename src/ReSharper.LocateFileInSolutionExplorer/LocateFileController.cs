@@ -1,23 +1,19 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Application.Threading.Tasks;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Occurences;
-using JetBrains.ReSharper.Features.Common.ComponentsAPI;
-using JetBrains.ReSharper.Features.Common.GoToByName;
 using JetBrains.ReSharper.Features.Common.GoToByName.Controllers;
-using JetBrains.ReSharper.Features.Common.GoToByName.ModelInitializers;
 using JetBrains.ReSharper.Psi.Files;
-using JetBrains.UI.GotoByName;
 using JetBrains.UI.PopupMenu.Impl;
 
 namespace ReSharper.LocateFileInSolutionExplorer
 {
     public class LocateFileController : GotoFileController
     {
-        public LocateFileController([NotNull] Lifetime lifetime, [NotNull] ISolution solution, [NotNull] IShellLocks locks, ITaskHost tasks, bool enableMulticore = false)
+        public LocateFileController([NotNull] Lifetime lifetime, [NotNull] ISolution solution,
+                                    [NotNull] IShellLocks locks, ITaskHost tasks, bool enableMulticore = false)
             : base(lifetime, solution, locks, tasks, enableMulticore)
         {
             Model.CaptionText.Value = "Enter file or folder name to locate:";
@@ -34,7 +30,8 @@ namespace ReSharper.LocateFileInSolutionExplorer
 
             using (CommitCookie.Commit(Solution))
             {
-                return Solution.GetComponent<ISolutionExplorer>().ShowInSolutionExplorer(occurence.ProjectItem, false);
+                var solutionExplorer = Solution.GetComponent<ISolutionExplorer>();
+                return solutionExplorer.ShowInSolutionExplorer(occurence.ProjectItem, activate: true);
             }
         }
     }
