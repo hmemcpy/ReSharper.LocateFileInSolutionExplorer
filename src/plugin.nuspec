@@ -13,6 +13,7 @@
     <iconUrl>https://raw.github.com/hmemcpy/ReSharper.LocateFileInSolutionExplorer/master/logo.png</iconUrl>
     <copyright>Copyright &#x00A9; 2013 Igal Tabachnik</copyright>
     <tags>locate find solution explorer</tags>
+    <releaseNotes>Improved double Shift-Alt-L behavior, contributed by the amazing @controlflow!</releaseNotes>
     <dependencies>
       <dependency id="Resharper" version="[8.1,8.2)"/>
     </dependencies>
