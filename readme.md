@@ -1,4 +1,4 @@
-Locate files or folders in Solution Explorer
+<div style="float: right"><img src="/logo.png" /></div>Locate files or folders in Solution Explorer
 ===
 
 A plugin for ReSharper 8 that allows you to quickly lookup any file or folder in your solution, but without opening it.
