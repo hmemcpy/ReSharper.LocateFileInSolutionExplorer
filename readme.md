@@ -19,6 +19,8 @@ To install, simply get [**ReSharper.LocateFileInSolutionExplorer**](https://resh
 
 ReSharper 8.1 or later required.
 
+Icon [Folder](http://thenounproject.com/term/folder/24226/) designed by designed by Sergio Calcara from the [Noun Project](http://www.thenounproject.com)
+
 ---
 
 ### Bugs? Questions? Suggestions?
