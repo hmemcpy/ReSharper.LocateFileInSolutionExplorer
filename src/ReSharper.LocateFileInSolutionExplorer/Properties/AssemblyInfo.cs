@@ -11,17 +11,17 @@ using JetBrains.Application.PluginSupport;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Igal Tabachnik")]
 [assembly: AssemblyProduct("ReSharper.LocateFileInSolutionExplorer")]
-[assembly: AssemblyCopyright("Copyright © Igal Tabachnik, 2013")]
+[assembly: AssemblyCopyright("Copyright © Igal Tabachnik, 2013, 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("0.1.1")]
-[assembly: AssemblyFileVersion("0.1.1")]
+[assembly: AssemblyVersion("0.1.2")]
+[assembly: AssemblyFileVersion("0.1.2")]
 
 [assembly: ActionsXml("ReSharper.LocateFileInSolutionExplorer.Actions.xml")]
 
 // The following information is displayed by ReSharper in the Plugins dialog
 [assembly: PluginTitle("Locate File in Solution Explorer (double Shift-Alt-L)")]
 [assembly: PluginDescription("Locate any file or folder by name in the solution explorer, without opening it. Invoked via double Shift-Alt-L.\r\n" +
-                             "Copyright © Igal Tabachnik, 2013")]
+                             "Copyright © Igal Tabachnik, 2013, 2014")]
 [assembly: PluginVendor("Igal Tabachnik")]
